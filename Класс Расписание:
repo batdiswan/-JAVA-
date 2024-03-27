@@ -1,0 +1,26 @@
+public class Расписание {
+
+    private List<Занятие> занятия;
+
+    public Расписание() {
+        this.занятия = new ArrayList<>();
+    }
+
+    public void addЗанятие(Занятие занятие) {
+        занятия.add(занятие);
+    }
+
+    public void removeЗанятие(Занятие занятие) {
+        занятия.remove(занятие);
+    }
+
+    public List<Занятие> getЗанятия() {
+        return занятия;
+    }
+
+    @Override
+    public String toString() {
+        return "Расписание:\n" +
+                занятия;
+    }
+}
