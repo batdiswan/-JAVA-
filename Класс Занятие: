@@ -1,0 +1,20 @@
+public class Занятие {
+
+    private String дата;
+    private String время;
+    private String тема;
+
+    public Занятие(String дата, String время, String тема) {
+        this.дата = дата;
+        this.время = время;
+        this.тема = тема;
+    }
+
+    @Override
+    public String toString() {
+        return "Занятие:\n" +
+                "Дата: " + дата + "\n" +
+                "Время: " + время + "\n" +
+                "Тема: " + тема;
+    }
+}
