@@ -1,0 +1,103 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+class Toy {
+    private int id;
+    private String name;
+    private int quantity;
+    private double weight; // частота выпадения игрушки в %
+
+    public Toy(int id, String name, int quantity, double weight) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.weight = weight;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Quantity: " + quantity + ", Weight: " + weight;
+    }
+}
+
+public class ToyStore {
+    private List<Toy> toys;
+    private List<Toy> prizeToys;
+
+    public ToyStore() {
+        toys = new ArrayList<>();
+        prizeToys = new ArrayList<>();
+    }
+
+    public void addToy(Toy toy) {
+        toys.add(toy);
+    }
+
+    public void updateWeight(int toyId, double newWeight) {
+        for (Toy toy : toys) {
+            if (toy.getId() == toyId) {
+                toy.setWeight(newWeight);
+                return;
+            }
+        }
+        System.out.println("Toy not found.");
+    }
+
+    public void drawPrize() {
+        double totalWeight = toys.stream().mapToDouble(Toy::getWeight).sum();
+        double random = Math.random() * totalWeight;
+
+        double sum = 0;
+        for (Toy toy : toys) {
+            sum += toy.getWeight();
+            if (random <= sum) {
+                prizeToys.add(toy);
+                toys.remove(toy);
+                writeToFile(toy);
+                return;
+            }
+        }
+    }
+
+    private void writeToFile(Toy toy) {
+        try (FileWriter writer = new FileWriter("prize_toys.txt", true)) {
+            writer.write(toy.toString() + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        ToyStore toyStore = new ToyStore();
+        toyStore.addToy(new Toy(1, "Solder", 10, 30));
+        toyStore.addToy(new Toy(2, "Cat", 8, 20));
+        toyStore.addToy(new Toy(3, "Teddy Bear", 5, 10));
+
+        toyStore.updateWeight(1, 40); // Update weight of Doll
+
+        toyStore.drawPrize(); // Draw a prize
+        System.out.println("Prize toy: " + toyStore.prizeToys.get(0));
+    }
+}
